@@ -1,22 +1,30 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, LoadingController, AlertController } from 'ionic-angular';
+import { FormBuilder, Validators } from '@angular/forms';
+import { AuthData } from '../../providers/auth-data';
+import { HomePage } from '../home/home';
+import { SignupPage } from '../signup/signup';
+import { EmailValidator } from '../../validators/email';
 
-/*
-  Generated class for the Login page.
-
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html'
 })
 export class LoginPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {}
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad LoginPage');
-  }
+	constructor(public navCtrl: NavController, private authData: AuthData) {}
+	
+	signInWithFacebook(): void {
+		this.authData.signInWithFacebook()
+		  .then(() => this.onSignInSuccess());
+	}
+	
+	private onSignInSuccess(): void {
+		console.log("Facebook display name ",this.authData.displayName());
+	}
+	
+	createAccount(){
+		this.navCtrl.push(SignupPage);
+	}
 
 }

@@ -2,53 +2,47 @@ import { NgModule, ErrorHandler } from '@angular/core';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 
-//Import pages
+// Importing Pages
 import { HomePage } from '../pages/home/home';
-import { EventCreatePage } from '../pages/event-create/event-create';
-import { EventDetailPage } from '../pages/event-detail/event-detail';
-import { EventListPage } from '../pages/event-list/event-list';
 import { LoginPage } from '../pages/login/login';
-import { ProfilePage } from '../pages/profile/profile';
-import { ResetPasswordPage } from '../pages/reset-password/reset-password';
 import { SignupPage } from '../pages/signup/signup';
 
-// Import providers
+// Importing Providers
 import { AuthData } from '../providers/auth-data';
-import { EventData } from '../providers/event-data';
-import { ProfileData } from '../providers/profile-data';
+
+// Importing AF2 Module
+import { AngularFireModule } from 'angularfire2';
+
+// AF2 Settings
+const firebaseConfig = {
+    apiKey: "AIzaSyAojUKRBIzZnQGw0ntTC-I6tY9hIPRkSzk",
+    authDomain: "lynkea-d0040.firebaseapp.com",
+    databaseURL: "https://lynkea-d0040.firebaseio.com",
+    storageBucket: "lynkea-d0040.appspot.com",
+    messagingSenderId: "964830719483"
+};
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
-    EventCreatePage,
-    EventDetailPage,
-    EventListPage,
     LoginPage,
-    ProfilePage,
-    ResetPasswordPage,
     SignupPage
   ],
   imports: [
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    AngularFireModule.initializeApp(firebaseConfig)
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
     HomePage,
-    EventCreatePage,
-    EventDetailPage,
-    EventListPage,
     LoginPage,
-    ProfilePage,
-    ResetPasswordPage,
     SignupPage
   ],
   providers: [
-    [{provide: ErrorHandler, useClass: IonicErrorHandler}],
-        AuthData,
-        EventData,
-        ProfileData
-    ]
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    AuthData
+  ]
 })
 export class AppModule {}
