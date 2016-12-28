@@ -2,6 +2,8 @@ import {Component} from "@angular/core";
 import {NavController} from "ionic-angular";
 import {AuthService} from "../../providers/auth-service";
 import {Lynk} from "../../components/lynk";
+import {Profile} from "../profile/profile"
+
 
 const LYNKS: Lynk[] = [{id: 1, link: 'asdsa'}, {id: 2, link: 'qqwqw'}]
 
@@ -24,8 +26,16 @@ export class HomePage {
     return this.authService.authenticated;
   }
 
+  signIn(provider) : void{
+    if(provider == "Facebook") this.authService.signInWithFacebook();
+  }
+
   signInWithFacebook(): void {
-    this.authService.signInWithFacebook();
+
+  }
+
+  myProfile() : void{
+    this.navCtrl.push(Profile);
   }
 
 }

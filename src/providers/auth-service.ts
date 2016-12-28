@@ -1,11 +1,12 @@
 import {Injectable} from "@angular/core";
+import {DatabaseService} from "./database-service";
 import {AuthProviders, FirebaseAuth, FirebaseAuthState, AuthMethods} from "angularfire2";
 
 @Injectable()
 export class AuthService {
   private authState: FirebaseAuthState;
 
-  constructor(public auth$: FirebaseAuth) {
+  constructor(public auth$: FirebaseAuth, private databaseService: DatabaseService) {
     this.authState = auth$.getAuth();
     auth$.subscribe((state: FirebaseAuthState) => {
       this.authState = state;
@@ -16,23 +17,17 @@ export class AuthService {
     return this.authState !== null;
   }
 
-  signInWithFacebook(): firebase.Promise<FirebaseAuthState> {
-    return this.auth$.login({
+  signInWithFacebook(): void {
+    this.auth$.login({
       provider: AuthProviders.Facebook,
       method: AuthMethods.Popup
+    }).then(() => {
+      this.databaseService.storeUser(this.authState.facebook);
     });
   }
 
   signOut(): void {
     this.auth$.logout();
-  }
-
-  displayName(): string {
-    if (this.authState != null) {
-      return this.authState.facebook.displayName;
-    } else {
-      return '';
-    }
   }
 
 }

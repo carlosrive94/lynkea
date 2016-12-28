@@ -3,8 +3,10 @@ import {IonicApp, IonicModule, IonicErrorHandler} from "ionic-angular";
 import {MyApp} from "./app.component";
 // Importing Pages
 import {HomePage} from "../pages/home/home";
+import {Profile} from "../pages/profile/profile";
 // Importing Providers
 import {AuthService} from "../providers/auth-service";
+import {DatabaseService} from "../providers/database-service";
 //Importing components
 import {LynkDetailComponent} from "../components/lynk-detail.component";
 // Importing AF2 Module
@@ -23,6 +25,7 @@ const firebaseConfig = {
   declarations: [
     MyApp,
     HomePage,
+    Profile,
     LynkDetailComponent
   ],
   imports: [
@@ -32,11 +35,12 @@ const firebaseConfig = {
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage
+    HomePage,
+    Profile
   ],
   providers: [
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    AuthService
+    AuthService, DatabaseService
   ]
 })
 export class AppModule {

@@ -9,8 +9,12 @@
 <ion-content padding>
 
   <div *ngIf="!authenticated()">
-    <button ion-button outline (click)="signInWithFacebook()">Facebook</button>
+    <button ion-button outline (click)="signIn('Facebook')">Facebook</button>
   </div>
+
+  <button ion-button block clear (click)="myProfile()">
+    My profile
+  </button>
 
   The world is your oyster.
   <ul class="lynks">
