@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import {Component} from "@angular/core";
+import {NavController, NavParams} from "ionic-angular";
+import {User} from "../../components/user";
 
 @Component({
   selector: 'page-profile',
@@ -7,6 +8,10 @@ import { NavController, NavParams } from 'ionic-angular';
 })
 export class Profile {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {}
+  user: User;
+
+  constructor(public navCtrl: NavController, public navParams: NavParams) {
+    this.user = navParams.get('userProfile');
+  }
 
 }

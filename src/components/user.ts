@@ -1,8 +1,7 @@
-export class User {
+export class User{
   uid: string;
   email: string;
-  provider: string;
+  providerId: string;
   displayName: string;
-  profileImageURL: string;
-  created: Date;
+  photoURL: string;
 }

@@ -8,9 +8,7 @@ export class DatabaseService {
   }
 
   storeUser(user: firebase.UserInfo) {
-    if(user.uid != null) {
-      const itemObservable = this.af.database.object('/users/' + user.uid);
-      itemObservable.update(user);
-    }
+    const itemObservable = this.af.database.object('/users/' + user.uid);
+    itemObservable.update(user);
   }
 }
