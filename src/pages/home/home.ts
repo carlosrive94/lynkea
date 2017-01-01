@@ -5,7 +5,7 @@ import {Lynk} from "../../components/lynk";
 import {Profile} from "../profile/profile";
 
 
-const LYNKS: Lynk[] = [{id: 1, link: 'asdsa'}, {id: 2, link: 'qqwqw'}]
+const LYNKS: Lynk[] = [{id: 1, link: 'asdsa'}, {id: 2, link: 'qqwqw'}];
 
 @Component({
   selector: 'page-home',
@@ -32,7 +32,8 @@ export class HomePage {
   }
 
   myProfile(): void {
-    this.navCtrl.push(Profile, {userProfile: this.authService.currentUser});
+    let currentUid = this.authService.getCurrentUid();
+    if (currentUid != null) this.navCtrl.push(Profile, {uid: currentUid});
   }
 
 }

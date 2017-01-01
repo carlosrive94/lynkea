@@ -1,13 +1,11 @@
 import {Injectable} from "@angular/core";
 import {DatabaseService} from "./database-service";
 import {AuthProviders, FirebaseAuth, FirebaseAuthState, AuthMethods} from "angularfire2";
-import {User} from "../components/user";
 
 @Injectable()
 export class AuthService {
 
   private authState: FirebaseAuthState;
-  public currentUser: User;
 
   constructor(public auth$: FirebaseAuth, private databaseService: DatabaseService) {
     auth$.subscribe((state: FirebaseAuthState) => {
@@ -19,12 +17,16 @@ export class AuthService {
     return this.authState !== null;
   }
 
+  getCurrentUid(): string {
+    return this.authState.uid;
+  }
+
   signInWithFacebook(): void {
     this.auth$.login({
       provider: AuthProviders.Facebook,
       method: AuthMethods.Popup
     }).then(() => {
-      this.updateUser(this.authState.facebook);
+      this.updateUser(this.authState.uid, this.authState.facebook);
     });
   }
 
@@ -33,14 +35,13 @@ export class AuthService {
       provider: AuthProviders.Google,
       method: AuthMethods.Popup
     }).then(() => {
-      this.updateUser(this.authState.google);
+      this.updateUser(this.authState.uid, this.authState.google);
     });
   }
 
-  updateUser(user: firebase.UserInfo): void {
+  updateUser(uid: string, user: firebase.UserInfo): void {
     if (user.uid != null) {
-      this.currentUser = user;
-      this.databaseService.storeUser(user);
+      this.databaseService.storeUser(uid, user);
     }
   }
 
