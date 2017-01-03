@@ -8,10 +8,7 @@
 
 <ion-content padding>
 
-  <span>{{user | async | json}}</span>
-
   <h1>{{(user | async)?.displayName}}</h1>
-
 
   <div *ngFor="let list of lists">
     <div *ngFor="let lynk of list | async">

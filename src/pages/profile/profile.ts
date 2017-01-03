@@ -1,5 +1,5 @@
 import {Component} from "@angular/core";
-import {NavParams} from "ionic-angular";
+import {NavParams, LoadingController, Loading} from "ionic-angular";
 import {DatabaseService} from "../../providers/database-service";
 import {FirebaseObjectObservable, FirebaseListObservable} from "angularfire2";
 
@@ -8,15 +8,25 @@ import {FirebaseObjectObservable, FirebaseListObservable} from "angularfire2";
   templateUrl: 'profile.html'
 })
 export class Profile {
-
+  public loading: Loading;
   uid: string;
   user: FirebaseObjectObservable<any>;
   lists: FirebaseListObservable<any>[];
 
-  constructor(public navParams: NavParams, private databaseService: DatabaseService) {
+  constructor(public loadingCtrl: LoadingController, public navParams: NavParams, private databaseService: DatabaseService) {
+    this.showLoading();
     this.uid = navParams.get('uid');
     this.user = databaseService.getUser(this.uid);
     this.iterateLists();
+  }
+
+  private showLoading() {
+    this.loading = this.loadingCtrl.create();
+    this.loading.present();
+  }
+
+  private dismissLoading() {
+    this.loading.dismiss();
   }
 
   private iterateLists(): void {
@@ -26,5 +36,6 @@ export class Profile {
         this.lists.push(this.databaseService.getList(this.uid, _list.key));
       });
     }, err => console.log(err));
+    this.dismissLoading();
   }
 }
