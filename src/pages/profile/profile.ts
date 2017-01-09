@@ -31,18 +31,17 @@ export class Profile {
   }
 
   private iterateLists(): void {
-    this.lysts = [];
     this.databaseService.getLystsOfUser(this.uid).subscribe(_lysts => {
+      this.lysts = [];
       _lysts.forEach(_lyst => {
-        this.lysts.push(this.databaseService.getLyst(this.uid, _lyst.$key));
+        this.lysts.push(this.databaseService.getLyst(_lyst.val().lystKey));
       });
       this.dismissLoading();
     });
   }
 
-  public addLynk(listKey: string) {
-    console.log(listKey);
-    let prompt = this.alertCtrl.create({
+  public addLynk(lystKey: string) {
+    this.alertCtrl.create({
       title: 'Add a Lynk',
       inputs: [
         {name: 'lynkName', placeholder: 'Name'},
@@ -53,17 +52,15 @@ export class Profile {
         {
           text: 'Add',
           handler: data => {
-            this.databaseService.addLynk(this.uid, listKey, data.lynkName, data.url);
+            this.databaseService.addLynk(this.uid, lystKey, data.lynkName, data.url);
           }
         }
       ]
-    });
-    prompt.present();
-
+    }).present();
   }
 
   public addLyst() {
-    let prompt = this.alertCtrl.create({
+    this.alertCtrl.create({
       title: 'Add a Lyst',
       inputs: [{name: 'lystName', placeholder: 'Lyst name'}],
       buttons: [
@@ -75,7 +72,6 @@ export class Profile {
           }
         }
       ]
-    });
-    prompt.present();
+    }).present();
   }
 }

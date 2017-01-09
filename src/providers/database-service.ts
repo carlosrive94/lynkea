@@ -18,27 +18,31 @@ export class DatabaseService {
   }
 
   getLystsOfUser(uid: string): FirebaseListObservable<any> {
-    return this.af.database.list('/users/' + uid + '/lysts');
-  }
-
-  getLynkListsOfUser(uid: string): FirebaseListObservable<any> {
     return this.af.database.list('/users/' + uid + '/lysts', {preserveSnapshot: true});
   }
 
-  getLyst(uid: string, key: string): Lyst {
-    var lyst = new Lyst();
-    lyst.info = this.af.database.object('/users/' + uid + '/lysts/' + key);
-    lyst.lynks = this.af.database.list('/users/' + uid + '/lysts/' + key + '/lynks');
+  getLyst(lystKey: string): Lyst {
+    let lyst = new Lyst();
+    lyst.info = this.af.database.object('/lysts/' + lystKey);
+    lyst.lynks = this.af.database.list('/lysts/' + lystKey + '/lynks');
     return lyst;
   }
 
   addLynk(uid: string, lystKey: string, lynkName: string, lynkUrl: string) {
-    const lyst = this.af.database.list('/users/' + uid + '/lysts/' + lystKey + '/lynks');
-    lyst.push({name: lynkName, url: lynkUrl});
+    const lyst = this.af.database.list('/lysts/' + lystKey + '/lynks');
+    lyst.push({name: lynkName, url: lynkUrl, postedBy: uid});
   }
 
   addLyst(uid: string, lystName: string) {
-    const lyst = this.af.database.list('/users/' + uid + '/lysts/');
-    lyst.push({name: lystName});
+    const lysts = this.af.database.list('/lysts/');
+    const promise = lysts.push({owner: uid, name: lystName});
+    promise.then(data => {
+      this.addLystToUser(uid, data.key);
+    });
+  }
+
+  private addLystToUser(uid: string, lystKey: string) {
+    const userLysts = this.af.database.list('/users/' + uid + '/lysts/');
+    userLysts.push({lystKey: lystKey});
   }
 }
