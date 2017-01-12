@@ -23,9 +23,17 @@ export class DatabaseService {
 
   getLyst(lystKey: string): Lyst {
     let lyst = new Lyst();
-    lyst.info = this.af.database.object('/lysts/' + lystKey);
-    lyst.lynks = this.af.database.list('/lysts/' + lystKey + '/lynks');
+    lyst.info = this.getLystInfo(lystKey);
+    lyst.lynks = this.getLystLynks(lystKey);
     return lyst;
+  }
+
+  getLystInfo(lystKey: string): FirebaseObjectObservable<any> {
+    return this.af.database.object('/lysts/' + lystKey);
+  }
+
+  getLystLynks(lystKey: string): FirebaseListObservable<any> {
+    return this.af.database.list('/lysts/' + lystKey + '/lynks');
   }
 
   addLynk(uid: string, lystKey: string, lynkName: string, lynkUrl: string) {
