@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {AngularFire, FirebaseObjectObservable, FirebaseListObservable} from "angularfire2";
-import {Lyst} from "../components/lynk-list";
+//import {Lyst} from "../components/lynk-list";
 
 @Injectable()
 export class DatabaseService {
@@ -21,11 +21,20 @@ export class DatabaseService {
     return this.af.database.list('/users/' + uid + '/lysts', {preserveSnapshot: true});
   }
 
-  getLyst(lystKey: string): Lyst {
+  /*getLyst(lystKey: string): Lyst {
     let lyst = new Lyst();
     lyst.info = this.getLystInfo(lystKey);
     lyst.lynks = this.getLystLynks(lystKey);
     return lyst;
+  }*/
+
+  getUserLysts(uid: string): FirebaseListObservable<any> {
+    return this.af.database.list('/lysts/', {
+      query: {
+        orderByChild: 'uid',
+        equalTo: uid
+      }
+    });
   }
 
   getLystInfo(lystKey: string): FirebaseObjectObservable<any> {
@@ -33,17 +42,22 @@ export class DatabaseService {
   }
 
   getLystLynks(lystKey: string): FirebaseListObservable<any> {
-    return this.af.database.list('/lysts/' + lystKey + '/lynks');
+    return this.af.database.list('/lynks/', {
+      query: {
+        orderByChild: 'lystKey',
+        equalTo: lystKey
+      }
+    });
   }
 
   addLynk(uid: string, lystKey: string, lynkName: string, lynkUrl: string) {
-    const lyst = this.af.database.list('/lysts/' + lystKey + '/lynks');
-    lyst.push({name: lynkName, url: lynkUrl, postedBy: uid});
+    const lyst = this.af.database.list('/lynks/');
+    lyst.push({name: lynkName, url: lynkUrl, postedBy: uid, lystKey: lystKey});
   }
 
   addLyst(uid: string, lystName: string) {
     const lysts = this.af.database.list('/lysts/');
-    const promise = lysts.push({owner: uid, name: lystName});
+    const promise = lysts.push({uid: uid, name: lystName});
     promise.then(data => {
       this.addLystToUser(uid, data.key);
     });

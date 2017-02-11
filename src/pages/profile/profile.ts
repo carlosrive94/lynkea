@@ -31,12 +31,33 @@ export class Profile {
   }
 
   private iterateLists(): void {
-    this.databaseService.getLystsOfUser(this.uid).subscribe(_lysts => {
+    this.databaseService.getUserLysts(this.uid).subscribe(_lysts => {
       this.lysts = [];
       _lysts.forEach(_lyst => {
-        this.lysts.push(this.databaseService.getLyst(_lyst.val().lystKey));
+        this.lysts.push({
+          key: _lyst.$key,
+          name: _lyst.name,
+          uid: _lyst.uid,
+          lynks: null
+        });
+        this.setLynks(_lyst.$key);
       });
       this.dismissLoading();
+    });
+  }
+
+  private setLynks(lystKey: string){
+    this.databaseService.getLystLynks(lystKey).subscribe(_lynks => {
+      let lynks = [];
+      _lynks.forEach(_lynk =>
+        lynks.push({
+          name: _lynk.name,
+          url: _lynk.url
+        }));
+
+      this.lysts.forEach(lyst => {
+        if (lyst.key == lystKey) lyst.lynks = lynks;
+      });
     });
   }
 
