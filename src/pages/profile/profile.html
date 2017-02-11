@@ -12,15 +12,16 @@
 
   <ion-list>
     <div ion-item *ngFor="let lyst of lysts">
-      <h4>{{(lyst.info | async)?.name}}:</h4>
+      <h4>{{lyst.name}}:</h4>
 
       <span>Lynks:</span>
       <ion-list>
-        <div ion-item *ngFor="let lynk of (lyst.lynks | async)">
-          <span>URL: {{(lynk)?.url}}</span>
+        <div ion-item *ngFor="let lynk of lyst.lynks">
+          <span>Name: {{lynk.name}}</span>
+          <span>URL: {{lynk.url}}</span>
         </div>
       </ion-list>
-      <button ion-button (click)="addLynk('-Ka4M5_3mKUZGB60iElZ')">Add Lynk</button>
+      <button ion-button (click)="addLynk(lyst.key)">Add Lynk</button>
 
     </div>
   </ion-list>
