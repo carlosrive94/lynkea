@@ -1,6 +1,5 @@
 import {Injectable} from "@angular/core";
 import {AngularFire, FirebaseObjectObservable, FirebaseListObservable} from "angularfire2";
-//import {Lyst} from "../components/lynk-list";
 
 @Injectable()
 export class DatabaseService {
@@ -17,17 +16,6 @@ export class DatabaseService {
     return this.af.database.object('/users/' + uid);
   }
 
-  getLystsOfUser(uid: string): FirebaseListObservable<any> {
-    return this.af.database.list('/users/' + uid + '/lysts', {preserveSnapshot: true});
-  }
-
-  /*getLyst(lystKey: string): Lyst {
-    let lyst = new Lyst();
-    lyst.info = this.getLystInfo(lystKey);
-    lyst.lynks = this.getLystLynks(lystKey);
-    return lyst;
-  }*/
-
   getUserLysts(uid: string): FirebaseListObservable<any> {
     return this.af.database.list('/lysts/', {
       query: {
@@ -35,10 +23,6 @@ export class DatabaseService {
         equalTo: uid
       }
     });
-  }
-
-  getLystInfo(lystKey: string): FirebaseObjectObservable<any> {
-    return this.af.database.object('/lysts/' + lystKey);
   }
 
   getLystLynks(lystKey: string): FirebaseListObservable<any> {
