@@ -2,7 +2,7 @@ import {Component} from "@angular/core";
 import {NavController} from "ionic-angular";
 import {AuthService} from "../../providers/auth-service";
 import {Lynk} from "../../components/lynk";
-import {Profile} from "../profile/profile";
+import {ProfilePage} from "../profile/profile";
 
 
 const LYNKS: Lynk[] = [{id: 1, link: 'asdsa'}, {id: 2, link: 'qqwqw'}];
@@ -33,7 +33,7 @@ export class HomePage {
 
   myProfile(): void {
     let currentUid = this.authService.getCurrentUid();
-    if (currentUid != null) this.navCtrl.push(Profile, {uid: currentUid});
+    if (currentUid != null) this.navCtrl.push(ProfilePage, {uid: currentUid});
   }
 
 }

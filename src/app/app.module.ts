@@ -3,7 +3,8 @@ import {IonicApp, IonicModule, IonicErrorHandler} from "ionic-angular";
 import {MyApp} from "./app.component";
 // Importing Pages
 import {HomePage} from "../pages/home/home";
-import {Profile} from "../pages/profile/profile";
+import {ProfilePage} from "../pages/profile/profile";
+import {LystPage} from "../pages/lyst/lyst";
 // Importing Providers
 import {AuthService} from "../providers/auth-service";
 import {DatabaseService} from "../providers/database-service";
@@ -25,7 +26,8 @@ const firebaseConfig = {
   declarations: [
     MyApp,
     HomePage,
-    Profile,
+    ProfilePage,
+    LystPage,
     LynkDetailComponent
   ],
   imports: [
@@ -36,7 +38,8 @@ const firebaseConfig = {
   entryComponents: [
     MyApp,
     HomePage,
-    Profile
+    ProfilePage,
+    LystPage
   ],
   providers: [
     {provide: ErrorHandler, useClass: IonicErrorHandler},

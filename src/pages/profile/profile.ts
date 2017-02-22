@@ -1,83 +1,26 @@
 import {Component} from "@angular/core";
-import {NavParams, LoadingController, Loading, AlertController} from "ionic-angular";
+import {NavParams, AlertController, NavController} from "ionic-angular";
 import {DatabaseService} from "../../providers/database-service";
-import {FirebaseObjectObservable} from "angularfire2";
-import {Lyst} from "../../components/lynk-list";
+import {FirebaseObjectObservable, FirebaseListObservable} from "angularfire2";
+import {LystPage} from "../lyst/lyst";
 
 @Component({
   selector: 'page-profile',
   templateUrl: 'profile.html'
 })
-export class Profile {
-  public loading: Loading;
+export class ProfilePage {
   uid: string;
   user: FirebaseObjectObservable<any>;
-  lysts: Lyst[];
+  lysts: FirebaseListObservable<any>;
 
-  constructor(public loadingCtrl: LoadingController, public alertCtrl: AlertController, public navParams: NavParams, private databaseService: DatabaseService) {
-    this.showLoading();
+  constructor(public navCtrl: NavController, public alertCtrl: AlertController, public navParams: NavParams, private databaseService: DatabaseService) {
     this.uid = navParams.get('uid');
     this.user = databaseService.getUser(this.uid);
-    this.iterateLists();
+    this.lysts = databaseService.getUserLysts(this.uid);
   }
 
-  private showLoading() {
-    this.loading = this.loadingCtrl.create();
-    this.loading.present();
-  }
-
-  private dismissLoading() {
-    this.loading.dismiss();
-  }
-
-  private iterateLists(): void {
-    this.databaseService.getUserLysts(this.uid).subscribe(_lysts => {
-      this.lysts = [];
-      _lysts.forEach(_lyst => {
-        this.lysts.push({
-          key: _lyst.$key,
-          name: _lyst.name,
-          uid: _lyst.uid,
-          lynks: null
-        });
-        this.setLynks(_lyst.$key);
-      });
-      this.dismissLoading();
-    });
-  }
-
-  private setLynks(lystKey: string){
-    this.databaseService.getLystLynks(lystKey).subscribe(_lynks => {
-      let lynks = [];
-      _lynks.forEach(_lynk =>
-        lynks.push({
-          name: _lynk.name,
-          url: _lynk.url
-        }));
-
-      this.lysts.forEach(lyst => {
-        if (lyst.key == lystKey) lyst.lynks = lynks;
-      });
-    });
-  }
-
-  public addLynk(lystKey: string) {
-    this.alertCtrl.create({
-      title: 'Add a Lynk',
-      inputs: [
-        {name: 'lynkName', placeholder: 'Name'},
-        {name: 'url', placeholder: 'URL'}
-      ],
-      buttons: [
-        {text: 'Cancel'},
-        {
-          text: 'Add',
-          handler: data => {
-            this.databaseService.addLynk(this.uid, lystKey, data.lynkName, data.url);
-          }
-        }
-      ]
-    }).present();
+  public navigateToLyst(lystKey: string) {
+    this.navCtrl.push(LystPage, {lystKey: lystKey});
   }
 
   public addLyst() {
@@ -94,5 +37,10 @@ export class Profile {
         }
       ]
     }).present();
+  }
+
+  public removeLyst(lystKey: string) {
+    console.log(lystKey);
+    this.databaseService.removeLyst(lystKey);
   }
 }

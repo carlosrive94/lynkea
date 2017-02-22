@@ -16,6 +16,10 @@ export class DatabaseService {
     return this.af.database.object('/users/' + uid);
   }
 
+  getLyst(lystKey: string): FirebaseObjectObservable<any> {
+    return this.af.database.object('/lysts/' + lystKey);
+  }
+
   getUserLysts(uid: string): FirebaseListObservable<any> {
     return this.af.database.list('/lysts/', {
       query: {
@@ -41,14 +45,11 @@ export class DatabaseService {
 
   addLyst(uid: string, lystName: string) {
     const lysts = this.af.database.list('/lysts/');
-    const promise = lysts.push({uid: uid, name: lystName});
-    promise.then(data => {
-      this.addLystToUser(uid, data.key);
-    });
+    lysts.push({uid: uid, name: lystName});
   }
 
-  private addLystToUser(uid: string, lystKey: string) {
-    const userLysts = this.af.database.list('/users/' + uid + '/lysts/');
-    userLysts.push({lystKey: lystKey});
+  removeLyst(lystKey: string) {
+    const lyst = this.af.database.object('/lysts/' + lystKey);
+    lyst.remove();
   }
 }

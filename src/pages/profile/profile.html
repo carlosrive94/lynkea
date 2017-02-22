@@ -10,19 +10,12 @@
 
   <h1>{{(user | async)?.displayName}}</h1>
 
+  <h2>My lysts</h2>
+
   <ion-list>
-    <div ion-item *ngFor="let lyst of lysts">
-      <h4>{{lyst.name}}:</h4>
-
-      <span>Lynks:</span>
-      <ion-list>
-        <div ion-item *ngFor="let lynk of lyst.lynks">
-          <span>Name: {{lynk.name}}</span>
-          <span>URL: {{lynk.url}}</span>
-        </div>
-      </ion-list>
-      <button ion-button (click)="addLynk(lyst.key)">Add Lynk</button>
-
+    <div ion-item *ngFor="let lyst of lysts | async">
+      <button ion-button (click)="navigateToLyst((lyst)?.$key)">{{(lyst)?.name}}</button>
+      <button ion-button (click)="removeLyst((lyst)?.$key)">REMOVE</button>
     </div>
   </ion-list>
   <button ion-button (click)="addLyst()">Add Lyst</button>
